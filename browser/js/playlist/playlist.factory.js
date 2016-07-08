@@ -1,17 +1,45 @@
 'use strict';
 
-juke.factory('PlaylistFactory', function ($http) {
+juke.factory('PlaylistFactory', function ($http, SongFactory) {
 
-  var methods = {};
+  var cachedPlaylists = [];
 
-  methods.createPlaylist = function (playlist) {
+  var PlaylistFactory = {};
 
-   return $http.post("/api/playlists/", playlist)
-    .then(function (resPlaylist) {
-      return resPlaylist.data;
-    })
+
+  PlaylistFactory.fetchAll = function () {
+    return $http.get('/api/playlists')
+    .then(function (response) {
+      angular.copy(response.data, cachedPlaylists);
+      return cachedPlaylists;
+    });
   }
 
-  return methods;
+  PlaylistFactory.fetchById = function(id) {
+    return $http.get('/api/playlists/' + id)
+    .then(function (response) {
+      return response.data;
+    });
+  }
+
+  PlaylistFactory.createPlaylist = function (playlist) {
+
+   return $http.post("/api/playlists", playlist)
+    .then(function (response) {
+      cachedPlaylists.push(response.data);
+      return response.data;
+    });
+  }
+
+  PlaylistFactory.addSong = function (playlist, song) {
+
+    return $http.post("/api/playlists/" + playlist.id + "/songs", song)
+      .then(function (response) {
+        return response.data;
+      })
+
+  }
+
+  return PlaylistFactory;
 
 })
