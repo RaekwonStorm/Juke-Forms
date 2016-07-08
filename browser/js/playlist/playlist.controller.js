@@ -33,6 +33,20 @@ juke.controller('PlaylistCtrl', function ($scope, PlaylistFactory, $stateParams,
     })
   }
 
+  $scope.remove = function (song) {
+    PlaylistFactory.removeSong($scope.playlist, song)
+    .then(function () {
+      var songArr = $scope.playlist.songs;
+      for (var i=0; i<songArr.length; i++) {
+        if (songArr[i].id === song.id) {
+          songArr.splice(i, 1);
+          break;
+        }
+      }
+    })
+
+  }
+
   $scope.toggle = function (song) {
     if (song !== PlayerFactory.getCurrentSong()) {
       PlayerFactory.start(song, $scope.playlist.songs);

@@ -5,8 +5,10 @@
       <div class="form-group">
         <label class="col-xs-2 control-label">Name</label>
         <div class="col-xs-10">
-          <input class="form-control" type="text" ng-model="playlist.name" ng-maxlength="16" required>
-          <div class="alert alert-warning" ng-show="playlistForm.$invalid && playlistForm.$dirty">Please enter a valid name between 1-16 characters</div>
+          <input class="form-control" name="playlistTitle" type="text" ng-model="playlist.name" ng-maxlength="16" required>
+          <div ng-messages="playlistForm.playlistTitle.$error" role="alert">
+            <div ng-message="required" ng-show="playlistForm.$dirty">Please enter a value for this field.</div>
+            <div ng-message="maxlength">This field can be at most 16 characters long, nerd!</div>
         </div>
       </div>
       <div class="form-group">
